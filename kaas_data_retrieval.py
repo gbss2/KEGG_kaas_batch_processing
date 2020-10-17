@@ -39,8 +39,8 @@ def script_usage():
     print('kaas_data_retrieval.py arguments:')
     print('\n Process and retrieve data from KAAS result URL:')
     print('-o | --output <basename>')
-    print('-u | --url <https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=<run-id>&key=<run-key>>')
-    print('Example: kaas_data_retrieval.py --output hsa_hg38 --url https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678 \n\n')
+    print('-u | --url <"https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=<run-id>&key=<run-key>">')
+    print('Example: kaas_data_retrieval.py --output hsa_hg38 --url "https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678" \n\n')
 
 def urlProcess(outputBasename, url):
     resultData = urlBatchProc(url)
@@ -82,6 +82,6 @@ if __name__ == '__main__':
         sys.exit(1)
     args = parser.parse_args()
     if args.output and args.url :
-        urlProcess(outputBasename, url)
+        urlProcess(output, url)
     else:
         script_usage()
