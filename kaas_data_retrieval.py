@@ -49,10 +49,10 @@ def urlBatchProc(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
     pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
+#    /html/body/div[3]/p[5]/a
     print(pathways)
     return(pathways)
 
-    /html/body/div[3]/p[5]/a
 def writeOutput(outputBasename,resultData):
     basepath = os.getcwd()
     path = basepath.join(outputBasename)
