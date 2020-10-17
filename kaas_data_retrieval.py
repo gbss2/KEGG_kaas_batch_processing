@@ -43,10 +43,8 @@ def script_usage():
     print('Example: kaas_data_retrieval.py --output hsa_hg38 --url "https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678" \n\n')
 
 def urlProcess(outputBasename, url):
-    resultData = urlBatchProc(url)
-    print('\n\n\n\n\n\n\n\n\n\n\n\nReturn print:')
-    print(resultData)
-    writeOutput(outputBasename, resultData)
+    resPage, resTree, resultData = urlBatchProc(url)
+    writeOutput(outputBasename, resultData, resPage, resTree)
 
 def urlBatchProc(url):
     page = requests.get(url)
@@ -54,18 +52,20 @@ def urlBatchProc(url):
     pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
 #    /html/body/div[3]/p[5]/a
     print(pathways)
-    return(pathways)
+    return(page, tree, pathways)
 
-def writeOutput(outputBasename,resultData):
+def writeOutput(outputBasename, resultData, resPage, resTree):
     basepath = os.getcwd()
-    path = basepath.join(outputBasename)
+    path = os.path.join(basepath, outputBasename)
     try:
         os.mkdir(path)
     except OSError:
         print ("Creation of the directory %s failed" % path)
     else:
         print ("Successfully created the directory %s " % path)
-
+    log = os.path.join(basepath, outputBasename, ".log")
+    with open(log, 'w') as l:
+        print(resTree, file=l)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
