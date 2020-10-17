@@ -49,7 +49,7 @@ def urlBatchProc(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
     pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
-    print pathways
+    print(pathways)
     return(pathways)
 
     /html/body/div[3]/p[5]/a
