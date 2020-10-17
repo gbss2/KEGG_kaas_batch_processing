@@ -30,9 +30,11 @@
 import os
 import io
 import sys, argparse
+import requests
 import pandas as pd
 from lxml import html
-import requests
+from datetime import datetime
+
 
 
 def script_usage():
@@ -64,8 +66,11 @@ def writeOutput(outputBasename, resultData, resPage, resTree):
     else:
         print ("Successfully created the directory %s " % path)
     log = os.path.join(basepath, outputBasename, ".log")
-    with open(log, 'w') as l:
+    print(log)
+    with open(log, 'a') as l:
+        print('kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
         print(resTree, file=l)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
