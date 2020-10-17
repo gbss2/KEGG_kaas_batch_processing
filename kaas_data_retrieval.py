@@ -82,6 +82,6 @@ if __name__ == '__main__':
         sys.exit(1)
     args = parser.parse_args()
     if args.output and args.url :
-        urlProcess(output, url)
+        urlProcess(args.output, args.url)
     else:
         script_usage()
