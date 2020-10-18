@@ -65,7 +65,7 @@ def writeOutput(outputBasename, resultData, resPage, resTree):
         print ("Creation of the directory %s failed" % path)
     else:
         print ("Successfully created the directory %s " % path)
-    log = os.path.join(basepath, outputBasename, ".log")
+    log = os.path.join(path, outputBasename + ".log")
     print(log)
     with open(log, 'a') as l:
         print('kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
