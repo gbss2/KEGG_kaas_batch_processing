@@ -74,7 +74,7 @@ def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2
     with open(log, 'a') as l:
         print('kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
         print('/n/n/#######Page', file=l)
-        print(page, file=l)
+        print(resPage, file=l)
         print('/n/n/#######Tree', file=l)
         print(resTree, file=l)
         print('/n/n/#######Pathway', file=l)
