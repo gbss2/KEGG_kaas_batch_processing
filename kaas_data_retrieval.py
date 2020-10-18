@@ -54,7 +54,7 @@ def urlBatchProc(url):
     tree = html.fromstring(page.content)
     pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
     pathways1 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/text()')
-    pathways2 = tree.xpath('//*[@id="main"]/text()')
+    pathways2 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/text()')
     pathways3 = tree.xpath('//*[position() >= 4 and not(position() > 403)]/text()')
     #    /html/body/div[3]/p[5]/a
     print(pathways)
