@@ -45,18 +45,22 @@ def script_usage():
     print('Example: kaas_data_retrieval.py --output hsa_hg38 --url "https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678" \n\n')
 
 def urlProcess(outputBasename, url):
-    resPage, resTree, resultData = urlBatchProc(url)
-    writeOutput(outputBasename, resultData, resPage, resTree)
+    #resPage, resTree, resultData = urlBatchProc(url)
+    resPage, resTree, pathways, pathways1, pathways2, pathways3 = urlBatchProc(url)
+    writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2, pathways3)
 
 def urlBatchProc(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
     pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
-#    /html/body/div[3]/p[5]/a
+    pathways1 = tree.xpath('//*[@id="main"]/p[5]/a/')
+    pathways2 = tree.xpath('//*[@id="main"]/text()')
+    pathways3 = tree.xpath('//*[position() >= 4 and not(position() > 403)]/text()')
+    #    /html/body/div[3]/p[5]/a
     print(pathways)
-    return(page, tree, pathways)
+    return(page, tree, pathways, pathways1, pathways2, pathways3)
 
-def writeOutput(outputBasename, resultData, resPage, resTree):
+def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2, pathways3):
     basepath = os.getcwd()
     path = os.path.join(basepath, outputBasename)
     try:
@@ -69,7 +73,18 @@ def writeOutput(outputBasename, resultData, resPage, resTree):
     print(log)
     with open(log, 'a') as l:
         print('kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
+        print('/n/n/#######Page', file=l)
+        print(page, file=l)
+        print('/n/n/#######Tree', file=l)
         print(resTree, file=l)
+        print('/n/n/#######Pathway', file=l)
+        print(pathways, file=l)
+        print('/n/n/#######Pathway1', file=l)
+        print(pathways1, file=l)
+        print('/n/n/#######Pathway2', file=l)
+        print(pathways2, file=l)
+        print('/n/n/#######Pathway3', file=l)
+        print(pathways3, file=l)
 
 
 if __name__ == '__main__':
