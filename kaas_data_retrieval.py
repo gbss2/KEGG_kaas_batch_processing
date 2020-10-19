@@ -56,7 +56,7 @@ def urlBatchProc(url):
     pathways1 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/text()')
     pathways2 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/text()')
     href = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
-    pathways3 = zip(pathways2, href)
+    pathways3 = list(zip(pathways2, href))
 #    pathways3 = tree.xpath('//*[position() >= 4 and not(position() > 403)]/text()')
 
     print(pathways)
@@ -88,10 +88,10 @@ def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2
         print('/n/n/#######Pathway3', file=l)
         print(tuple(pathways3), file=l)
         print('/n/n/#######Table', file=l)
-        pdPathway = pd.DataFrame(list(pathways3), columns = ['Pathway', 'Link'], index=list(pathways1))
+        pdPathway = pd.DataFrame(pathways3, columns = ['Pathway', 'Link'], index=list(pathways1))
         print(pdPathway, file=l)
         print('/n/n/#######Table', file=l)
-        print(pd.DataFrame(list(pathways3), columns = ['Pathway', 'Link']), file=l)
+        print(pd.DataFrame(pathways3, columns = ['Pathway', 'Link']), file=l)
 
 
 if __name__ == '__main__':
