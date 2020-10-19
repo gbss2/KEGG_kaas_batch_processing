@@ -46,23 +46,20 @@ def script_usage():
 
 def urlProcess(outputBasename, url):
     #resPage, resTree, resultData = urlBatchProc(url)
-    resPage, resTree, pathways, pathways1, pathways2, pathways3 = urlBatchProc(url)
-    writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2, pathways3)
+    resPage, resTree, pathways, pdPathway = urlBatchProc(url)
+    writeOutput(outputBasename, resPage, resTree, pdPathway)
 
 def urlBatchProc(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
-    pathways = tree.xpath('//*[@id="main"]/p[5]/a/text()')
-    pathways1 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/text()')
-    pathways2 = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/text()')
-    href = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
-    pathways3 = list(zip(pathways2, href))
-#    pathways3 = tree.xpath('//*[position() >= 4 and not(position() > 403)]/text()')
+    pathwaysID = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/text()')
+    pathwaysContent = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/text()')
+    pathwaysHref = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
+    pathwaysTuple = list(zip(pathwaysContent, pathwaysHref))
+    pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
+    return(page, tree, pathways, pdPathway)
 
-    print(pathways)
-    return(page, tree, pathways, pathways1, pathways2, pathways3)
-
-def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2, pathways3):
+def writeOutput(outputBasename, resPage, resTree, pdPathway):
     basepath = os.getcwd()
     path = os.path.join(basepath, outputBasename)
     try:
@@ -74,24 +71,21 @@ def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2
     log = os.path.join(path, outputBasename + ".log")
     print(log)
     with open(log, 'a') as l:
-        print('kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
-        print('/n/n/#######Page', file=l)
-        print(resPage, file=l)
-        print('/n/n/#######Tree', file=l)
-        print(resTree, file=l)
-        print('/n/n/#######Pathway', file=l)
-        print(pathways, file=l)
-        print('/n/n/#######Pathway1', file=l)
-        print(pathways1, file=l)
-        print('/n/n/#######Pathway2', file=l)
-        print(pathways2, file=l)
-        print('/n/n/#######Pathway3', file=l)
-        print(tuple(pathways3), file=l)
-        print('/n/n/#######Table', file=l)
-        pdPathway = pd.DataFrame(pathways3, columns = ['Pathway', 'Link'], index=list(pathways1))
+        print('/n/n kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
+#        print('/n/n/#######Page', file=l)
+#        print(resPage, file=l)
+#        print('/n/n/#######Tree', file=l)
+#        print(resTree, file=l)
+#        print('/n/n/#######Pathway', file=l)
+#        print(pathways, file=l)
+#        print('/n/n/#######Pathway1', file=l)
+#        print(pathways1, file=l)
+#        print('/n/n/#######Pathway2', file=l)
+#        print(pathways2, file=l)
+#        print('/n/n/#######Pathway3', file=l)
+#        print(tuple(pathways3), file=l)
+        print('/n/n/#######pdPathway', file=l)
         print(pdPathway, file=l)
-        print('/n/n/#######Table', file=l)
-        print(pd.DataFrame(pathways3, columns = ['Pathway', 'Link']), file=l)
 
 
 if __name__ == '__main__':
