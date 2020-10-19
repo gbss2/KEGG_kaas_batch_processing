@@ -88,7 +88,7 @@ def writeOutput(outputBasename, resPage, resTree, pathways, pathways1, pathways2
         print('/n/n/#######Pathway3', file=l)
         print(tuple(pathways3), file=l)
         print('/n/n/#######Table', file=l)
-        print(pd.DataFrame(list(tuple(pathways3)), columns = ['Pathway', 'Link']), file=l)
+        print(pd.DataFrame(list(tuple(pathways3)), columns = ['Pathway', 'Link'], index=list(pathways)), file=l)
         print('/n/n/#######Table', file=l)
         print(pd.DataFrame(list(pathways3), columns = ['Pathway', 'Link']), file=l)
 
