@@ -46,7 +46,7 @@ def script_usage():
 
 def urlProcess(outputBasename, url):
     #resPage, resTree, resultData = urlBatchProc(url)
-    resPage, resTree, pathways, pdPathway = urlBatchProc(url)
+    resPage, resTree, pdPathway = urlBatchProc(url)
     writeOutput(outputBasename, resPage, resTree, pdPathway)
 
 def urlBatchProc(url):
@@ -57,7 +57,7 @@ def urlBatchProc(url):
     pathwaysHref = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
     pathwaysTuple = list(zip(pathwaysContent, pathwaysHref))
     pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
-    return(page, tree, pathways, pdPathway)
+    return(page, tree, pdPathway)
 
 def writeOutput(outputBasename, resPage, resTree, pdPathway):
     basepath = os.getcwd()
