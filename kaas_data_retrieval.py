@@ -34,15 +34,15 @@ import requests
 import pandas as pd
 from lxml import html
 from datetime import datetime
-
+from tabulate import tabulate
 
 
 def script_usage():
-    print('kaas_data_retrieval.py arguments:')
-    print('\n Process and retrieve data from KAAS result URL:')
+    print('\n\nkaas_data_retrieval.py arguments:')
+    print('\n\nProcess and retrieve data from KAAS result URL:')
     print('-o | --output <basename>')
     print('-u | --url <"https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=<run-id>&key=<run-key>">')
-    print('Example: kaas_data_retrieval.py --output hsa_hg38 --url "https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678" \n\n')
+    print('\n\nExample: kaas_data_retrieval.py --output hsa_hg38 --url "https://www.genome.jp/kaas-bin/kaas_main?mode=map&id=12345678&key=12345678" \n\n')
 
 def urlProcess(outputBasename, url):
     #resPage, resTree, resultData = urlBatchProc(url)
@@ -71,7 +71,7 @@ def writeOutput(outputBasename, resPage, resTree, pdPathway):
     log = os.path.join(path, outputBasename + ".log")
     print(log)
     with open(log, 'a') as l:
-        print('/n/n kaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
+        print('\n\nkaas_data_retrieval log at ' + datetime.today().strftime('%Y-%m-%d-%H:%M:%S'), file=l)
 #        print('/n/n/#######Page', file=l)
 #        print(resPage, file=l)
 #        print('/n/n/#######Tree', file=l)
@@ -84,9 +84,9 @@ def writeOutput(outputBasename, resPage, resTree, pdPathway):
 #        print(pathways2, file=l)
 #        print('/n/n/#######Pathway3', file=l)
 #        print(tuple(pathways3), file=l)
-        print('/n/n/#######pdPathway', file=l)
-        print(pdPathway.to_string(), file=l)
-        print('/n/n/#######pdPathway', file=l)
+        print('\n\n#######pdPathway', file=l)
+        print(tabulate(pdPathway, headers=pdPathway.columns), file=l)
+        print('\n\n#######pdPathway', file=l)
         with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.colheader_justify', 'left', 'display.max_colwidth', None, 'display.width', None, ):
             print(pdPathway, file=l)
 
