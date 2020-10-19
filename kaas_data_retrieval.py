@@ -85,8 +85,8 @@ def writeOutput(outputBasename, resPage, resTree, pdPathway):
 #        print('/n/n/#######Pathway3', file=l)
 #        print(tuple(pathways3), file=l)
         print('/n/n/#######pdPathway', file=l)
-        with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.colheader_justify', 'left', 'display.max_colwidth', None)
-        print(pdPathway, file=l)
+        with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.colheader_justify', 'left', 'display.max_colwidth', None):
+            print(pdPathway, file=l)
 
 
 if __name__ == '__main__':
