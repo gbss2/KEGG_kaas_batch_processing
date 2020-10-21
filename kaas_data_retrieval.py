@@ -53,14 +53,17 @@ def urlProcess(outputBasename, url):
 def urlBatchProc(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
+    print(tree.xpath('//*[@id="main"]/p[5]/text()'))
     pathwaysID = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/text()')
     pathwaysContent = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/text()')
     pathwaysHref = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
     pathwaysTuple = list(zip(pathwaysContent, pathwaysHref))
     pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
+    print('Pre-processing size = 'pdPathway.shape)
 #    pdPathway = df['pdPathway'].str.split(' ', 1, expand=True).str[-1]
     pdPathway['KO_Count'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Pathway"]]
     pdPathway['KO_Genes'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Link"]]
+    print('Post-processing size = 'pdPathway.shape)
     return(page, tree, pdPathway)
 
 def writeOutput(outputBasename, resPage, resTree, pdPathway):
@@ -97,6 +100,7 @@ def writeOutput(outputBasename, resPage, resTree, pdPathway):
     kaas_url = 'https://www.kegg.jp/kegg-bin/show_pathway?ko03450/reference%3dwhite/default%3d%23bfffbf/K10884/K10885/K10887/K06642/K03512/K03513/K10777/K10886/K10980#'
     kaasSession = requests.Session()
     kaasSession.get(kaas_url)
+    kaasContent = kaasSession.post(kaas_url)
     kaasContent = kaasSession.get(kaas_url)
     with open(outfile, 'wb') as output:
         output.write(kaasContent.content)
