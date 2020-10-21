@@ -17,8 +17,8 @@
 #
 # COMMAND LINE: ./kaas_data_retrieval.py -out <output name> -url <kaas result URL>
 #
-# DEPENDENCIES: lxml, requests
-#
+# DEPENDENCIES: lxml, requests, tabulate, pandas
+# pip install tabulate
 #
 # DESCRIPTION:
 #
@@ -31,6 +31,7 @@ import os
 import io
 import sys, argparse
 import requests
+import bs4
 import pandas as pd
 from lxml import html
 from datetime import datetime
@@ -57,6 +58,9 @@ def urlBatchProc(url):
     pathwaysHref = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
     pathwaysTuple = list(zip(pathwaysContent, pathwaysHref))
     pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
+#    pdPathway = df['pdPathway'].str.split(' ', 1, expand=True).str[-1]
+    pdPathway['KO_Count'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Pathway"]]
+    pdPathway['KO_Genes'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Link"]]
     return(page, tree, pdPathway)
 
 def writeOutput(outputBasename, resPage, resTree, pdPathway):
@@ -86,9 +90,18 @@ def writeOutput(outputBasename, resPage, resTree, pdPathway):
 #        print(tuple(pathways3), file=l)
         print('\n\n#######pdPathway', file=l)
         print(tabulate(pdPathway, headers=pdPathway.columns), file=l)
-        print('\n\n#######pdPathway', file=l)
-        with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.colheader_justify', 'left', 'display.max_colwidth', None, 'display.width', None, ):
-            print(pdPathway, file=l)
+#        print('\n\n#######pdPathway', file=l)
+#        with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.colheader_justify', 'left', 'display.max_colwidth', None, 'display.width', None, ):
+#            print(pdPathway, file=l)
+    outfile = 'ko03450.png'
+    kaas_url = 'https://www.kegg.jp/kegg-bin/show_pathway?ko03450/reference%3dwhite/default%3d%23bfffbf/K10884/K10885/K10887/K06642/K03512/K03513/K10777/K10886/K10980#'
+    kaasSession = requests.Session()
+    kaasSession.get(kaas_url)
+    kaasContent = kaasSession.get(kaas_url)
+    with open(outfile, 'wb') as output:
+        output.write(kaasContent.content)
+    print(f"requests:: File {outfile} downloaded successfully!")
+    kaasSession.close()
 
 
 if __name__ == '__main__':
