@@ -59,11 +59,11 @@ def urlBatchProc(url):
     pathwaysHref = tree.xpath('//*[@id="main"]/p[position() >= 4 and not(position() > 403)]/a/@href')
     pathwaysTuple = list(zip(pathwaysContent, pathwaysHref))
     pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
-    print('Pre-processing size = 'pdPathway.shape)
+    print('Pre-processing size = ', pdPathway.shape)
 #    pdPathway = df['pdPathway'].str.split(' ', 1, expand=True).str[-1]
     pdPathway['KO_Count'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Pathway"]]
     pdPathway['KO_Genes'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Link"]]
-    print('Post-processing size = 'pdPathway.shape)
+    print('Post-processing size = ', pdPathway.shape)
     return(page, tree, pdPathway)
 
 def writeOutput(outputBasename, resPage, resTree, pdPathway):
