@@ -61,8 +61,8 @@ def urlBatchProc(url):
     pdPathway = pd.DataFrame(pathwaysTuple, columns = ['Pathway', 'Link'], index=list(pathwaysID))
     print('Pre-processing size = ', pdPathway.shape)
 #    pdPathway = df['pdPathway'].str.split(' ', 1, expand=True).str[-1]
-    pdPathway['KO_Count'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Pathway"]]
-    pdPathway['KO_Genes'] = [x.rsplit("\(.*\)", 1)[-1] for x in pdPathway["Link"]]
+    pdPathway['KO_Count'] = [x.rpartition("\(")[2].rstrip('\)') for x in pdPathway["Pathway"]]
+    pdPathway['KO_Genes'] = [x.rpartition(".*23bfffbf/")[2] for x in pdPathway["Link"]]
     print('Post-processing size = ', pdPathway.shape)
     return(page, tree, pdPathway)
 
